@@ -31,7 +31,7 @@ int main(int argc, char* argv[]) {
 
     if(argc != 2) {
         std::cout << "ERROR: port is not specified as a command line argument" << std::endl;
-	exit(1);
+        exit(1);
     }
 
     int port = std::atoi(argv[1]);
@@ -115,6 +115,6 @@ int main(int argc, char* argv[]) {
 
     //TODO: refactor to RAII
     t.join();
-
+    close(epoll_fd);
     return 0;
 }
