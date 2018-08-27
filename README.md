@@ -30,3 +30,8 @@
 ## NOTE:
   Since all the produced csv files are stored into **./csv** directory, its more convenient to clean-up the directory before
   next launch of **run_clients.sh**.
+
+## TODOS:
+* create distinct EPOLL class, in order to localize all manipulations with epoll and error handling. Close descriptor in its destructor (RAII)
+* create distinct print/display worker (tcp_server.cpp looks a bit messy). Add join() in its destructor (RAII).
+* fix tcp server output, it should print also last less than 1s interval packets received statistics.
