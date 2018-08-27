@@ -1,16 +1,8 @@
 #include "ClientInfo.h"
 
-#include <arpa/inet.h>
-#include <netinet/in.h>
 #include <sys/socket.h>
-#include <stdio.h>
-
-#include <algorithm>
-#include <functional>
-#include <iostream>
-#include <numeric>
-#include <sstream>
-#include <utility>
+#include <netinet/in.h>
+#include <arpa/inet.h>
 
 namespace {
     std::string ip_from_socket(int socket) {
@@ -25,9 +17,6 @@ namespace {
     }
 }
 
-//----------------------------------------------------------------------------------------
-// class ClientInfo
-//----------------------------------------------------------------------------------------
 ClientInfo::ClientInfo(int socket, int i_id)
     : fd(socket)
     , create_time(std::chrono::steady_clock::now())

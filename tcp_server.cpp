@@ -17,6 +17,11 @@
 
 #define MAX_EVENTS 32
 
+void error(const char* msg) {
+    printf("%s\n", msg);
+    exit(1);
+}
+
 //non-blocking mode
 int set_nonblock(int fd) {
     int flags;
@@ -30,32 +35,46 @@ int set_nonblock(int fd) {
 int main(int argc, char* argv[]) {
 
     if(argc != 2) {
-        std::cout << "ERROR: port is not specified as a command line argument" << std::endl;
-        exit(1);
+	error("ERROR: port is not specified as a command line argument");
     }
 
     int port = std::atoi(argv[1]);
 
     int master_socket = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
+    if(master_socket == -1) {
+        error("ERROR on creating a socket");
+    }
 
     struct sockaddr_in sock_addr;
     sock_addr.sin_family = AF_INET;
     sock_addr.sin_port = htons(port);
     sock_addr.sin_addr.s_addr = htonl(INADDR_ANY);
-    bind(master_socket, (struct sockaddr*)&sock_addr, sizeof(sock_addr));
+
+    if(-1 == bind(master_socket, (struct sockaddr*)&sock_addr, sizeof(sock_addr))) {
+        error("ERROR on binding to the address");
+    }
 
     set_nonblock(master_socket);
 
-    listen(master_socket, SOMAXCONN);
+    if(-1 == listen(master_socket, SOMAXCONN)) {
+	error("ERROR on listening");
+    }
 
     // create epoll descriptors
     int epoll_fd = epoll_create1(0);
+    if(-1 == epoll_fd) {
+	error("ERROR on creating epoll");
+    }
 
     // register epoll_event in epoll
     struct epoll_event event;
     event.data.fd = master_socket;
     event.events = EPOLLIN;
-    epoll_ctl(epoll_fd, EPOLL_CTL_ADD, master_socket, &event);
+    if(-1 == epoll_ctl(epoll_fd, EPOLL_CTL_ADD, master_socket, &event)) {
+        close(epoll_fd);
+	close(master_socket);
+        error("ERROR on registering event in epoll");
+    }
 
     // keeps all connected clients information
     std::shared_ptr<ClientsData> p_clients_data = std::make_shared<ClientsData>();
@@ -115,6 +134,9 @@ int main(int argc, char* argv[]) {
 
     //TODO: refactor to RAII
     t.join();
+
     close(epoll_fd);
+    close(master_socket);
+
     return 0;
 }
