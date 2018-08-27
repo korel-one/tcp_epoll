@@ -1,7 +1,10 @@
 #include "CSVWriter.h"
 
 #include <stdio.h>
+#include <algorithm>
+#include <functional>
 #include <iostream>
+#include <numeric>
 #include <string>
 #include <sstream>
 
