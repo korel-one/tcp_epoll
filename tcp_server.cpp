@@ -17,16 +17,6 @@
 
 #define MAX_EVENTS 32
 
-//todo: remove
-void print(char* buff, size_t len) {
-    if(strlen(buff) < len) {
-        return;
-    }
-    else {
-        std::cout <<std::string(buff, len) << std::endl;
-    }
-}
-
 //non-blocking mode
 int set_nonblock(int fd) {
     int flags;
@@ -38,11 +28,19 @@ int set_nonblock(int fd) {
 }
 
 int main(int argc, char* argv[]) {
+
+    if(argc != 2) {
+        std::cout << "ERROR: port is not specified as a command line argument" << std::endl;
+	exit(1);
+    }
+
+    int port = std::atoi(argv[1]);
+
     int master_socket = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
 
     struct sockaddr_in sock_addr;
     sock_addr.sin_family = AF_INET;
-    sock_addr.sin_port = htons(8888);
+    sock_addr.sin_port = htons(port);
     sock_addr.sin_addr.s_addr = htonl(INADDR_ANY);
     bind(master_socket, (struct sockaddr*)&sock_addr, sizeof(sock_addr));
 
@@ -109,9 +107,6 @@ int main(int argc, char* argv[]) {
                     // TODO: get to know first whether all the data sent by a client has read, then increment a packets_num
                     // simplification: increment a packets_num every read, due to tiny message size
                     p_clients_data->OnPacketReceiveFrom(events[i].data.fd, buffer, recv_result);
-
-                    print(buffer, recv_result);
-                    //send(events[i].data.fd, buffer, recv_result, MSG_NOSIGNAL);
                 }
 
             }
