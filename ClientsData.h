@@ -59,7 +59,7 @@ class ClientsData {
         void OnPacketReceiveFrom(int socket);
 
     private:
-        int NextClientId() const { return curr_client_id++; }
+        int NextClientId() { return curr_client_id++; }
 
     private:
         int curr_client_id;

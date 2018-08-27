@@ -3,9 +3,12 @@
 #include <arpa/inet.h>
 #include <netinet/in.h>
 #include <sys/socket.h>
+#include <stdio.h>
+
 
 #include <algorithm>
 #include <functional>
+#include <iostream>
 #include <numeric>
 #include <sstream>
 #include <utility>
@@ -100,7 +103,7 @@ ClientInfo::~ClientInfo() {
 
 void ClientInfo::WriteLine(const std::string& line) {
     if (!p_file) {
-        if (fopen_s(&p_file, (file_name + ".csv").c_str(), "a") != 0) {
+	if(!(p_file = fopen((file_name + ".csv").c_str(), "a"))) {
             std::cout << "ERROR: file " << file_name << " was not opened\n";
         }
     }
@@ -113,14 +116,14 @@ void ClientInfo::WriteLine(const std::string& line) {
 }
 
 void ClientInfo::SaveToFile(const std::vector<int>& indices, const std::string& i_file_name) {
-    FILE* p_f;
-    if (fopen_s(&p_f, i_file_name.c_str(), "a") != 0) {
+    FILE* p_f = fopen(i_file_name.c_str(), "a");
+    if (!p_f) {
         std::cout << "ERROR: file " << i_file_name << " was not opened\n";
     }
 
     char buf[128] = {0};
     for (auto i : indices) {
-        sprintf_s(buf, sizeof(buf), "%d,%f,%d", v_n1[i], v_n2[i], v_n3[i]);
+        sprintf(buf, "%d,%f,%d", v_n1[i], v_n2[i], v_n3[i]);
         fprintf(p_f, "%s\n", buf);
     }
 
