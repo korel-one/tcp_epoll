@@ -19,10 +19,12 @@
 
 //todo: remove
 void print(char* buff, size_t len) {
-	if(strlen(buff) < len) return;
-	else {
-		std::cout <<std::string(buff, len) << std::endl;
-	}
+    if(strlen(buff) < len) {
+        return;
+    }
+    else {
+        std::cout <<std::string(buff, len) << std::endl;
+    }
 }
 
 //non-blocking mode
@@ -61,11 +63,12 @@ int main(int argc, char* argv[]) {
     std::shared_ptr<ClientsData> p_clients_data = std::make_shared<ClientsData>();
 
     std::thread t([c_data = p_clients_data](){
-	using namespace std::chrono_literals;
+        using namespace std::chrono_literals;
+
         while(true) {
-		c_data->Print();
-		std::this_thread::sleep_for(1s);
-	}
+            c_data->Print();
+            std::this_thread::sleep_for(1s);
+        }
     });
 
 
@@ -79,9 +82,9 @@ int main(int argc, char* argv[]) {
         for(unsigned int i = 0; i < N; ++i) {
             if(events[i].data.fd == master_socket) {
                 int slave_socket = accept(master_socket, 0, 0);
-		set_nonblock(slave_socket);
+                set_nonblock(slave_socket);
 
-		p_clients_data->AddNewClient(slave_socket);
+                p_clients_data->AddNewClient(slave_socket);
 
                 struct epoll_event _event;
                 _event.data.fd = slave_socket;
@@ -99,15 +102,15 @@ int main(int argc, char* argv[]) {
                     shutdown(events[i].data.fd, SHUT_RDWR);
                     close(events[i].data.fd);
 
-		    p_clients_data->RemoveClient(events[i].data.fd);
+                    p_clients_data->RemoveClient(events[i].data.fd);
                 }
                 else if(recv_result > 0) {
 
-		    // TODO: get to know first whether all the data sent by a client has read, then increment a packets_num
-		    // simplification: increment a packets_num every read, due to tiny message size
-		    p_clients_data->OnPacketReceiveFrom(events[i].data.fd);
+                    // TODO: get to know first whether all the data sent by a client has read, then increment a packets_num
+                    // simplification: increment a packets_num every read, due to tiny message size
+                    p_clients_data->OnPacketReceiveFrom(events[i].data.fd);
 
-		    print(buffer, recv_result);
+                    print(buffer, recv_result);
                     //send(events[i].data.fd, buffer, recv_result, MSG_NOSIGNAL);
                 }
 
