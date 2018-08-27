@@ -206,6 +206,8 @@ void ClientsData::Print() {
         }
     }
 
+    if (0 == connected_clients_num) return;
+
     printf("connected clients # = %d:\n", connected_clients_num);
     int n = ip_addr.size();
     for(int i = 0; i < n; ++i) {

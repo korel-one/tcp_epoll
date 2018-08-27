@@ -12,7 +12,7 @@ then
 fi
 
 max_num_packets=$4
-for((i=0;i < $num_clients;i++));
+for((i=1;i < $num_clients;i++));
 do
   if [ -z $max_num_packets ]
   then
@@ -21,3 +21,10 @@ do
       ./tcp_client $host_addr_port $max_value $max_num_packets &
   fi
 done
+
+if [ -z $max_num_packets ]
+then
+      ./tcp_client $host_addr_port $max_value
+else
+      ./tcp_client $host_addr_port $max_value $max_num_packets
+fi

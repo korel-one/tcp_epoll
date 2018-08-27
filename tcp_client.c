@@ -80,6 +80,9 @@ int main(int argc, char* argv[]) {
 		usleep(500*1000);
 	}
 
-	close(sock);
+	if(close(sock) == -1) {
+		error("ERROR on close socket");
+	}
+
 	return 0;
 }
