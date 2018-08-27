@@ -88,22 +88,22 @@ ClientInfo::~ClientInfo() {
     // 1. operate with v_n1
     auto indices1 = create_vec_indices(N);
     sort_indices(v_n1, indices1);
-    SaveToFile(indices1, file_name + "_n1.csv");
+    SaveToFile(indices1, "./csv/"+file_name + "_n1.csv");
 
     //2. operate with v_n2
     auto indices2 = create_vec_indices(N);
     sort_indices(v_n2, indices2, false);
-    SaveToFile(indices2, file_name + "_n2.csv");
+    SaveToFile(indices2, "./csv/"+file_name + "_n2.csv");
 
     // 3. operate with v_n3
     auto indices3 = create_vec_indices(N);
     sort_indices(v_n3, indices3);
-    SaveToFile(indices3, file_name + "_n3.csv");
+    SaveToFile(indices3, "./csv/"+file_name + "_n3.csv");
 }
 
 void ClientInfo::WriteLine(std::string&& line) {
     if (!p_file) {
-	if(!(p_file = fopen((file_name + ".csv").c_str(), "a"))) {
+	if(!(p_file = fopen(("./csv/" + file_name + ".csv").c_str(), "a"))) {
             std::cout << "ERROR: file " << file_name << " was not opened\n";
         }
     }
@@ -116,7 +116,7 @@ void ClientInfo::WriteLine(std::string&& line) {
 }
 
 void ClientInfo::SaveToFile(const std::vector<int>& indices, const std::string& i_file_name) {
-    FILE* p_f = fopen(i_file_name.c_str(), "a");
+    FILE* p_f = fopen(i_file_name.c_str(), "w");
     if (!p_f) {
         std::cout << "ERROR: file " << i_file_name << " was not opened\n";
     }
