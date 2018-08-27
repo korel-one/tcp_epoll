@@ -101,7 +101,7 @@ ClientInfo::~ClientInfo() {
     SaveToFile(indices3, file_name + "_n3.csv");
 }
 
-void ClientInfo::WriteLine(const std::string& line) {
+void ClientInfo::WriteLine(std::string&& line) {
     if (!p_file) {
 	if(!(p_file = fopen((file_name + ".csv").c_str(), "a"))) {
             std::cout << "ERROR: file " << file_name << " was not opened\n";
@@ -167,11 +167,12 @@ void ClientsData::RemoveClient(int socket) {
     data.erase(socket);
 }
 
-void ClientsData::OnPacketReceiveFrom(int socket) {
+void ClientsData::OnPacketReceiveFrom(int socket, const char* buf, size_t buf_size) {
     std::lock_guard<std::mutex> lock(m);
     auto it = data.find(socket);
     if(it != std::end(data)) {
         it->second.ReactPacketArrived();
+        it->second.WriteLine(std::string(buf, buf_size));
     };
 }
 

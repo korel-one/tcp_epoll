@@ -19,7 +19,7 @@ public:
     int GetReceivedPacketsNum() const { return received_packets; }
     void ReactPacketArrived() { ++received_packets; }
 
-    void WriteLine(const std::string& line);
+    void WriteLine(std::string&& line);
 
     const int GetId() const { return id; }
 
@@ -56,7 +56,7 @@ class ClientsData {
         int GetConnectedClientsNum();
         void Print();
 
-        void OnPacketReceiveFrom(int socket);
+        void OnPacketReceiveFrom(int socket, const char* buf, size_t buf_size);
 
     private:
         int NextClientId() { return curr_client_id++; }

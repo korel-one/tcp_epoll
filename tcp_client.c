@@ -70,7 +70,7 @@ int main(int argc, char* argv[]) {
 			error("ERROR on sending");
 		}
 		else {
-			printf("sent_%d: %s\n", i, buf);
+			printf("pid_%d: %s\n", getpid(), buf);
 		}
 
 		/*if(recv(sock, reply, sizeof(reply), 0) < 0) {

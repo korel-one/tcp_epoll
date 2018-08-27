@@ -108,7 +108,7 @@ int main(int argc, char* argv[]) {
 
                     // TODO: get to know first whether all the data sent by a client has read, then increment a packets_num
                     // simplification: increment a packets_num every read, due to tiny message size
-                    p_clients_data->OnPacketReceiveFrom(events[i].data.fd);
+                    p_clients_data->OnPacketReceiveFrom(events[i].data.fd, buffer, recv_result);
 
                     print(buffer, recv_result);
                     //send(events[i].data.fd, buffer, recv_result, MSG_NOSIGNAL);
