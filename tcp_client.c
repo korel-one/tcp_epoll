@@ -59,7 +59,7 @@ int main(int argc, char* argv[]) {
 	}
 
 	//seed
-	srand(time(0));
+	srand(getpid());
 	char buf[256];
 	char reply[256];
 
