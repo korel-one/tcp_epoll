@@ -34,4 +34,5 @@
 ## TODOS:
 * create distinct EPOLL class, in order to localize all manipulations with epoll and error handling. Close descriptor in its destructor (RAII)
 * create distinct print/display worker (tcp_server.cpp looks a bit messy). Add join() in its destructor (RAII).
+  Or leave it as it is, but detach() immediatelly after an instantiation of std::thread object.
 * fix tcp server output, it should print also last less than 1s interval packets received statistics.
